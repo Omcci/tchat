@@ -1,3 +1,4 @@
 node_module
 .vscode
 .env
+env.js
