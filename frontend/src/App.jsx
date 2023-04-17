@@ -1,33 +1,85 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
 import './App.css'
+import env from './env.js';
+
+var ipBackend = `http://${env.ip}:${env.portBackend}/`;
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [socket, setSocket] = useState(null);
+  const [room, setRoom] = useState('');
+  const [pseudo, setPseudo] = useState('');
+  const [players, setPlayers] = useState(false);
+
+  // useEffect(() => {
+    // console.log('environement', environement)
+  //   const newSocket = io(ipBackend, { transports: ["polling"] });
+  //   setSocket(newSocket);
+
+  //   return () => newSocket.close();
+  // }, []);
+
+  // function handleJoinRoom() {
+  //   socket.emit('joinRoom', room);
+  // }
+
+  const handleJoinRoom = (username, room) => {
+    socket.emit('joinRoom', username, room);
+    socket.emit('roomJoined', console.log());
+  }
+
+
+  function handleRoomChange(event) {
+    setRoom(event.target.value);
+  }
+
+  function handlePseudoChange(event) {
+    setPseudo(event.target.value);
+  }
+
+
+  function handleConnect() {
+    const newSocket = io(ipBackend, { transports: ["polling"] });
+    setSocket(newSocket);
+    console.log("socket", socket)
+  }
+
+  function handleListPlayer () {
+    console.log(socket.emit('getPlayers', setPlayers()))
+    socket.emit('getPlayers', console.log());
+  }
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Application multi-joueur</h1>
+      {!socket ? (
+        <button onClick={handleConnect}>Connecter au serveur Socket.io</button>
+      ) : (
+        <>
+          <p>Connecté au serveur Socket.io avec l'ID : {socket.id}</p>
+          <div>
+            <p>Votre Pseudo :</p>
+            <input type="text" value={pseudo} onChange={handlePseudoChange} />
+          </div>
+          <div>
+          <input type="text" value={room} onChange={handleRoomChange} />
+            <button onClick={() => handleJoinRoom(pseudo , room)}>Rejoindre une salle</button>
+          </div>
+          {/* {console.log(socket)} */}
+          <button onClick={() => handleListPlayer()}>liste joueur</button>
+          {players ?
+            <div>
+              {console.log("backend ---> frontend ", players)}
+              <p>        
+                - {players}
+              </p>
+            </div>
+          :
+          ""
+          }
+        </>
+      )}
+      {/* Le reste du contenu de votre application */}
     </div>
   )
 }
