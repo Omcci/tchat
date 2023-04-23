@@ -1,153 +1,208 @@
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-import './App.css'
+// import React, { useState, useEffect } from 'react';
+// import io from 'socket.io-client';
+// import env from './env.js';
+// import Game from './Games'
+// const socket = io(`http://${env.ip}:${env.portBackend}/`);
+
+// function App() {
+//   const [playerName, setPlayerName] = useState('');
+//   const [players, setPlayers] = useState([]);
+
+//   useEffect(() => {
+    // socket.on('connect', () => {
+    //   console.log(`Connected to server with socket id: ${socket.id}`);
+    // });
+
+//     socket.on('playerJoined', (players) => {
+//       setPlayers(players);
+//     });
+
+//     socket.on('playerLeft', (players) => {
+//       setPlayers(players);
+//     });
+
+//     return () => {
+//       socket.disconnect();
+//     };
+//   }, []);
+
+//   const handleNameChange = (event) => {
+//     setPlayerName(event.target.value);
+//   };
+
+//   const handleJoinGame = () => {
+//     socket.emit('joinGame', playerName);
+//   };
+
+//   return (
+//     <div>
+//       <h1>Multiplayer Game</h1>
+//       <div>
+//         <input type="text" value={playerName} onChange={handleNameChange} />
+//         <button onClick={handleJoinGame}>Join Game</button>
+//       </div>
+//       <Game/>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+// import React, { useState, useEffect } from 'react';
+// import io from 'socket.io-client';
+// import env from './env.js';
+// import Game from './Game.jsx';
+
+// function App() {
+
+//   return (
+//     <div>
+//       <Game/>
+//     </div>
+//   );
+// }
+
+
+// export default App;
+
+
+
+
+// import React, { useState, useEffect} from "react";
+// import io from "socket.io-client";
+// import env from './env.js';
+// // import Game from './Games'
+// const ipBackend = `http://${env.ip}:${env.portBackend}/`;
+// const socketOpen = io(ipBackend);
+
+// const App = () => {
+//   const [username, setUsername] = useState("");
+//   const [room, setRoom] = useState("");
+
+//   const handleConnect = () => {
+//     // const newSocket = ENDPOINT
+//     socketOpen.emit("join", { username, room });
+//     console.log('socketOpen', socketOpen.id);
+//   };
+
+//   const handleDisconnect = () => {
+//     socketOpen.disconnect();
+//   };
+
+//   //   useEffect(() => {
+//   //   setSocket(ENDPOINT)
+//   //   socket.on('connect', () => {
+//   //     console.log(`Connected to server with socket id: ${socket.id}`);
+//   //   });
+
+//   //   return () => {
+//   //     socket.disconnect();
+//   //   };
+//   // }, []);
+
+//   return (
+//     <div>
+//       <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+//       <input type="text" placeholder="Room" value={room} onChange={(e) => setRoom(e.target.value)} />
+//       {socketOpen ? (
+//         <div>
+//           <p>Connecter : {socketOpen.id}</p>
+//           <p>Connected to room: {room}</p>
+//           <button onClick={handleDisconnect}>Disconnect</button>
+//         </div>
+//       ) : (
+//         <button onClick={handleConnect}>Connect</button>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default App;
+
+
+
+import React, { useState, useEffect } from "react";
+import io from "socket.io-client";
 import env from './env.js';
+// const ENDPOINT = io(`http://${env.ip}:${env.portBackend}/`);
 
-var ipBackend = `http://${env.ip}:${env.portBackend}/`;
-const socketOpen = io(ipBackend);
+const ENDPOINT = `http://${env.ip}:${env.portBackend}/`;
 
-function App() {
+
+const App = () => {
   const [socket, setSocket] = useState(null);
-  const [room, setRoom] = useState('');
-  const [pseudo, setPseudo] = useState('');
-  const [players, setPlayers] = useState(false);
-
-  // useEffect(() => {
-    // console.log('environement', environement)
-  //   const newSocket = io(ipBackend, { transports: ["polling"] });
-  //   setSocket(newSocket);
-
-  //   return () => newSocket.close();
-  // }, []);
-
-  // function handleJoinRoom() {
-  //   socket.emit('joinRoom', room);
-  // }
-
-  const handleJoinRoom = (username, room) => {
-    // socketOpen.on('joinRoom', username, room);
-    socketOpen.emit('joinRoom', username, room);
-    socketOpen.emit('roomJoined', console.log());
-  }
-
-
-  const  handleRoomChange = (event) => {
-    setRoom(event.target.value);
-  }
-
-  const handlePseudoChange = (event) => {
-    setPseudo(event.target.value);
-  }
-
+  const [username, setUsername] = useState("");
+  const [room, setRoom] = useState("");
+  const [users, setUsers] = useState([]);
 
   const handleConnect = () => {
-    const newSocket = io(ipBackend, { transports: ["polling"] });
+    const newSocket = io(ENDPOINT);
     setSocket(newSocket);
-    console.log("socket", socket)
-  }
+    newSocket.emit("join", { username, room });
+  };
 
-   const handleClick = () => {
-    console.log("test");
-  //   // console.log(socket.emit('getPlayers', setPlayers()))
-  //   socket.emit('getPlayers', (data) => {
-  //     console.log("data --->", data)
-  //     setPlayers(data)
-  //   });
-  //   // socketOpen.on('getPlayers', (data) => {
-  //   //   console.log("data --->", data)
-  //   //   setPlayers(data)
-  //   // });
-  }
+  const handleClickNewPseudo = () => {
+    if (socket) {
+      socket.emit("newUsername", { username, room });
+    }
+  };
 
-  // useEffect(() => {
-  //   // // Requête pour récupérer les joueurs de la room
-  //   // socketOpen.on('getPlayers', (data) => {
-  //   //   console.log('data Open composent', data); 
-  //   //   setPlayers(data);
-  //   // });
-
-  //   // // Écouteur pour mettre à jour la liste des joueurs lorsqu'elle change
-  //   // socketOpen.on('playersUpdate', (data) => {
-  //   //   setPlayers(data);
-  //   // });
-
-  //   // // Nettoyage du composant lorsqu'il est démonté
-  //   // return () => {
-  //   //   socketOpen.off('playersUpdate');
-  //   // }
-
-  //   socket.on('getPlayers', (players) => {
-  //     setPlayers(players);
-  //   });
-
-  //   // getPlayers();
-
-  //   // return () => {
-  //   //   socket.off('playersUpdate');
-  //   // };
-  // }, []);
+  const handleClickDisconnect = () => {
+    // button déconnexion
+    socket.disconnect();
+    setSocket(null);
+  };
 
   useEffect(() => {
-    // Écouteur pour mettre à jour la liste des joueurs lorsqu'elle change
-    socketOpen.on('playersUpdate', (data) => {
-      setPlayers(data);
-    });
-  
-    // Nettoyage du composant lorsqu'il est démonté
-    return () => {
-      socketOpen.off('playersUpdate');
-    };
-  }, []);
-  
-  // Envoie une demande pour récupérer les joueurs
-  useEffect(() => {
-    // socket.emit('getPlayers', (data) => {
-    //   console.log('data received from server', data);
-    //   setPlayers(data);
-    // });
-    socketOpen.on('getPlayers', (data) => {
-      console.log("data", data);
-      setPlayers(data);
-    });
+    if (socket) {
+      socket.on("usersInRoom", (users) => {
+        setUsers(users);
+      });
+    }
   }, [socket]);
 
-  return (
-    <div className="App">
-      <h1>Application multi-joueur</h1>
-      {!socket ? (
-        <button onClick={handleConnect}>Connecter au serveur Socket.io</button>
-      ) : (
-        <>
-          <p>Connecté au serveur Socket.io avec l'ID : {socket.id}</p>
-          <div>
-            <p>Votre Pseudo :</p>
-            <input type="text" value={pseudo} onChange={handlePseudoChange} />
-          </div>
-          <div>
-          <input type="text" value={room} onChange={handleRoomChange} />
-            <button onClick={() => handleJoinRoom(pseudo , room)}>Rejoindre une salle</button>
-          </div>
-          {/* {console.log(socket)} */}
-          <button onClick={handleClick}>liste joueur</button>
-          {console.log("backend ---> frontend ", players)}
-          {/* {players} */}
-          {players && players.length > 0 ?
-            <div>
-              {console.log("backend ---> frontend ", players)}
-              <ul>
-                {players.map((player) => (
-                  <li key={player.id}>{player.username}</li>
-                ))}
-              </ul>
-            </div>
-          :
-          "No players"
-          }
-        </>
-      )}
-      {/* Le reste du contenu de votre application */}
-    </div>
-  )
-}
+  useEffect(() => {
+    const handleUnload = (event) => {
+      event.preventDefault();
+      if (socket) {
+        socket.emit("leave", { username, room });
+        socket.disconnect();
+      }
+    };
 
-export default App
+    window.addEventListener("beforeunload", handleUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
+  }, [socket, username, room]);
+
+  return (
+    <div>
+      <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+      {socket ? (
+        <div>
+          <button onClick={handleClickNewPseudo}>Changer de Pseudo</button>
+          <button onClick={handleClickDisconnect}>Déconnexion</button>
+          {console.log("sokcet --->", socket)}
+          <p>--- {socket.id}</p>
+          <p>Connected to room: {room}</p>
+          <ul>
+            {console.log("users", users)}
+            {users.map((user) => (
+              <li key={user.id}>{user.username}</li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div>
+          <input type="text" placeholder="Room" value={room} onChange={(e) => setRoom(e.target.value)} />
+          <button onClick={handleConnect}>Connect</button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
+
