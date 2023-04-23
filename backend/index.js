@@ -7,119 +7,57 @@ var io = require('socket.io')(http, {
   cors: {
     origin: `http://${env.ip}:${env.portFront}`,
     methods: ["GET", "POST"],
-    // allowedHeaders: ["my-custom-header"],
-    // credentials: true
 }});
-
-
-let players = [];
-// const rooms = {};
-
-// function getUsersInRoom(room) {
-//   const users = [];
-//   const socketsInRoom = io.sockets.adapter.rooms.get(room);
-//   if (socketsInRoom) {
-//     socketsInRoom.forEach(socketId => {
-//       const socket = io.sockets.sockets.get(socketId);
-//       if (socket) {
-//         users.push({ id: socket.id, username: socket.username });
-//       }
-//     });
-//   }
-//   return users;
-// }
-
-// io.on('connection', (socket) => {
-//   // ...
-//   console.log('connexion..;')
-//   // Join a specific room
-//   const room = 'room1';
-//   socket.join(room);
-//   socket.currentRoom = room;
-
-//   // Notify all users in the room of the updated list of users
-//   const usersInRoom = getUsersInRoom(room);
-//   io.to(room).emit('usersInRoom', usersInRoom);
-
-//   // Listen for changes to the list of users in the room
-//   socket.on('disconnect', () => {
-//     const usersInRoom = getUsersInRoom(room);
-//     io.to(room).emit('usersInRoom', usersInRoom);
-//   });
-// });
-
-// const rooms = {};
-
-// io.on("connection", (socket) => {
-//   console.log("a user connected");
-
-//   socket.on("join", ({ username, room }) => {
-//     console.log(`${username} joined ${room}`);
-//     socket.join(room);
-//     io.to(room).emit("user joined", `${username} joined the room`);
-//   });
-
-//   socket.on("disconnect", () => {
-//     console.log("user disconnected");
-//   });
-// });
 
 const usersByRoom = {};
 
-// io.on("connection", (socket) => {
-//   console.log("usersByRoom", usersByRoom)
-//   socket.on("join", ({ username, room }) => {
-//     socket.join(room);
-
-//     if (!usersByRoom[room]) {
-//       usersByRoom[room] = [];
-//     }
-
-//     usersByRoom[room].push({ id: socket.id, username });
-
-//     io.to(room).emit("usersInRoom", usersByRoom[room]);
-//   });
-
-//   socket.on("disconnect", () => {
-//     console.log("usersByRoom", usersByRoom)
-//     const room = Object.keys(socket.rooms)[1];
-
-//     if (usersByRoom[room]) {
-//       usersByRoom[room] = usersByRoom[room].filter((user) => user.id !== socket.id);
-//       io.to(room).emit("usersInRoom", usersByRoom[room]);
-//     }
-//   });
-// });
-
 io.on("connection", (socket) => {
+
+  // l'événement "join" qui est émis lorsque qu'un utilisateur rejoint une room.
   socket.on("join", ({ username, room }) => {
+
     socket.join(room);
+
+    // Si ce n'est pas le cas, il est créé en tant que tableau vide.
     if (!usersByRoom[room]) {
       usersByRoom[room] = [];
     }
 
+    // On push les infod 
     usersByRoom[room].push({ id: socket.id, username });
     
+    // Et on r'envoie dans le frontend
     io.to(room).emit("usersInRoom", usersByRoom[room]);
     console.log("usersByRoom", usersByRoom)
+
   });
 
+   // l'événement "join" qui est émis lorsque qu'un utilisateur change son pseudo.
   socket.on("newUsername", ({ username , room}) => {
     console.log("username", username);
+
     if (usersByRoom[room]) {
+      
+      // créer un nouveau tableau en itérant sur chaque élément du tableau usersByRoom[room]
       usersByRoom[room] = usersByRoom[room].map((user) =>
         user.id === socket.id ? { ...user, username } : user
       );
+
+      // Réponse au front 
       io.to(room).emit("usersInRoom", usersByRoom[room]);
+    
     }
+
     console.log(usersByRoom[room]);
+    
   });
 
+  // Ecoute dans un utilisateur ce déconnecte
   socket.on("disconnect", () => {
     Object.keys(usersByRoom).forEach((room) => {
       usersByRoom[room] = usersByRoom[room].filter((user) => user.id !== socket.id);
       io.to(room).emit("usersInRoom", usersByRoom[room]);
-      // Suppression Room
+      // Suppression Room si il n'ya plus de joueurs dans la room
       if (usersByRoom[room].length === 0) {
         delete usersByRoom[room];
       }
