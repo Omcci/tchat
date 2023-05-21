@@ -25,10 +25,10 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  /* display: flex;
+  place-items: center; */
+  /* min-width: 320px;
+  min-height: 100vh; */
 }
 
 h1 {
@@ -66,4 +66,42 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+
+.home {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  height: 60vh;
+}
+  
+.home-tchat { 
+  grid-area: 1 / 1 / 2 / 2; 
+  background-color: red;
+  /* border: red 10px solid; */
+}
+.home-listplayer { 
+  grid-area: 1 / 2 / 2 / 3; 
+  background-color: blue;
+  border: red 10px solid;
+}
+
+.footer {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  height: 10vh;
+}
+  
+.footer-message { 
+  grid-area: 1 / 1 / 2 / 2; 
+  /* border: red 10px solid; */
+}
+.footer-param { 
+  grid-area: 1 / 2 / 2 / 3; 
 }

@@ -40,3 +40,21 @@
 .read-the-docs {
   color: #888;
 }
+
+
+.home {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  border-color: red;
+}
+  
+.home-tchat { 
+  grid-area: 1 / 1 / 2 / 2; 
+  border-color: blue;
+}
+.home-listplayer { 
+  grid-area: 1 / 2 / 2 / 3; 
+}

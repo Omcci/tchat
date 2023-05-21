@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
-import env from './env.js';
+import env from "./env.js";
+import Home from "./Pages/Home.jsx";
 
 const ENDPOINT = `http://${env.ip}:${env.portBackend}/`;
 
@@ -8,76 +9,73 @@ const App = () => {
   const [socket, setSocket] = useState(null);
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
-  const [users, setUsers] = useState([]);
+  const [isAlert, setIsAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
 
-  // Connexion Socket.io + Join Room
-  const handleConnect = () => {
+  const handleConnect = async () => {
     const newSocket = io(ENDPOINT);
-    setSocket(newSocket);
+    const newSocketRef = { current: newSocket }; // Variable de référence pour conserver la référence au socket
+
     newSocket.emit("join", { username, room });
-  };
 
-  // Function Changer Pseudo
-  const handleClickNewPseudo = () => {
-    if (socket) {
-      socket.emit("newUsername", { username, room });
-    }
-  };
-
-  // Function Déconnexion Button 
-  const handleClickDisconnect = () => {
-    // button déconnexion
-    socket.disconnect();
-    setSocket(null);
-  };
-
-  useEffect(() => {
-    if (socket) {
-      socket.on("usersInRoom", (users) => {
-        setUsers(users);
+    try {
+      await new Promise((resolve, reject) => {
+        console.log("try");
+        console.log("newSocketRef", newSocketRef);
+        newSocketRef.current.on("userExists", (message) => {
+          console.log("message", message);
+          if (message === "errorPseudoDoublon") {
+            setAlertMessage("Ce pseudo est déjà utilisé dans la room !");
+            setIsAlert(true);
+            newSocketRef.current.disconnect();
+            reject();
+          } else {
+            setAlertMessage("");
+            setIsAlert(false);
+            resolve();
+          }
+        });
       });
+
+      setSocket(newSocketRef.current); // Met à jour le socket seulement si la connexion est réussie
+    } catch (error) {
+      console.log("error", error);
+      // Catch the error if the socket was disconnected
+      return;
     }
-  }, [socket]);
+  };
 
   useEffect(() => {
-    const handleUnload = (event) => {
-      event.preventDefault();
-      if (socket) {
-        socket.emit("leave", { username, room });
-        socket.disconnect();
-      }
-    };
-
-    // Vérification si l'tuilisateur force une déconnexion en ferment son navigator
-    window.addEventListener("beforeunload", handleUnload);
-
-    // Vérification si l'tuilisateur force une déconnexion en ferment son navigator
-    return () => {
-      window.removeEventListener("beforeunload", handleUnload);
-    };
-  }, [socket, username, room]);
+    console.log("socket", socket);
+  }, [socket]);
 
   return (
     <div>
-      <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
       {socket ? (
-        <div>
-          <button onClick={handleClickNewPseudo}>Changer de Pseudo</button>
-          <button onClick={handleClickDisconnect}>Déconnexion</button>
-          {console.log("sokcet --->", socket)}
-          <p>--- {socket.id}</p>
-          <p>Connected to room: {room}</p>
-          <ul>
-            {console.log("users", users)}
-            {users.map((user) => (
-              <li key={user.id}>{user.username}</li>
-            ))}
-          </ul>
-        </div>
+        <Home
+          socket={socket}
+          setSocket={setSocket}
+          username={username}
+          setUsername={setUsername}
+          room={room}
+          setRoom={setRoom}
+        />
       ) : (
         <div>
-          <input type="text" placeholder="Room" value={room} onChange={(e) => setRoom(e.target.value)} />
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          {/* <input
+            type="text"
+            placeholder="Room"
+            value={room}
+            onChange={(e) => setRoom(e.target.value)}
+          /> */}
           <button onClick={handleConnect}>Connect</button>
+          {isAlert ? <p style={{ color: "red" }}>{alertMessage}</p> : ""}
         </div>
       )}
     </div>
