@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ListUsers from "../Components/ListUsers";
+import ListMessages from "../Components/ListMessages";
 
 const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   const [users, setUsers] = useState([]);
@@ -7,6 +8,7 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   const [isAlert, setIsAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
   // Function Changer Pseudo
   const handleClickNewPseudo = (callback) => {
@@ -67,9 +69,17 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
       }
     });
 
+    // Écouter l'événement "chatMessage" pour recevoir les nouveaux messages
+    socket.on("chatMessage", ({ messages }) => {
+      // Ajouter le nouveau message à la liste des messages existants
+      console.log("chatMessage - message", messages);
+      setMessages(messages);
+    });
+
     setTimeout(() => {
       console.log("updateListUser");
       socket.emit("updateListUser", { username, room });
+      socket.emit("updateListMessage", { room });
     }, 300);
   }, [socket]);
 
@@ -93,6 +103,8 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
 
   const handleClickNewMessage = () => {
     console.log("message", message);
+    // Envoyer le message au serveur via l'événement "chatMessage"
+    socket.emit("chatMessage", { username, room, message });
   };
 
   // Function Déconnexion Button
@@ -110,7 +122,7 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
       <p>{owner ? "Chef" : "Non chef"}</p>
       <div className="home">
         <div className="home-tchat">
-          <p>tchat</p>
+          <ListMessages messages={messages} />
         </div>
         <div className="home-listplayer">
           <ListUsers users={users} />

@@ -21,11 +21,11 @@ io.on("connection", (socket) => {
 
     // Si ce n'est pas le cas, il est créé en tant que tableau vide.
     if (!tchatRoom[room] || tchatRoom[room] === undefined) {
-      tchatRoom[room] = { users: [] };
+      tchatRoom[room] = { users: [], messages : [] };
     }
 
     // Vérifier si le pseudo existe déjà dans la room
-    const userExists = tchatRoom[room].users.find((user) => user.username === username);
+    const userExists = tchatRoom[room]?.users?.find((user) => user.username === username);
 
     console.log("userExists", userExists);
 
@@ -52,9 +52,34 @@ io.on("connection", (socket) => {
     // Envoyer la liste des utilisateurs connectés dans la room à tous les autres utilisateurs déjà présents
     socket.to(room).emit("usersInRoom", tchatRoom[room].users);
 
+    // Vérifiez si la salle de discussion contient des messages
+    if (tchatRoom[room].messages && tchatRoom[room].messages.length > 0) {
+      // Envoyer les messages existants à l'utilisateur qui rejoint
+      socket.emit("existingMessages", tchatRoom[room].messages);
+    }
+
     console.log("tchatRoom", tchatRoom);
     console.log("tchatRoom[room]", tchatRoom[room]);
     console.log("tchatRoom[room].users", tchatRoom[room].users);
+  });
+
+  // L'événement "chatMessage" est émis lorsque qu'un utilisateur envoie un message dans une salle de discussion.
+  socket.on("chatMessage", ({ username, room, message }) => {
+    if (!tchatRoom[room].messages || tchatRoom[room].messages === undefined) {
+      tchatRoom[room].messages = [];
+    }
+
+    tchatRoom[room].messages.push({
+      id: tchatRoom[room].messages.length+1,
+      userid: socket.id, 
+      username : username,
+      message: message,
+      time: new Date().toLocaleTimeString() // Ajoutez l'heure actuelle au message
+    });
+
+    console.log("tchatRoom[room]", tchatRoom[room]);
+    // Envoyer le message à tous les utilisateurs dans la salle de discussion
+    io.to(room).emit("chatMessage", { messages : tchatRoom[room].messages});
   });
 
   socket.on("newUsername", ({ username, room }) => {
@@ -83,6 +108,12 @@ io.on("connection", (socket) => {
   
   socket.on("updateListUser", ({ username, room }) => {
     io.to(room).emit("usersInRoom", tchatRoom[room]?.users);
+  });
+
+  socket.on("updateListMessage", ({ room }) => {
+    console.log("updateListMessage --->", room);
+    console.log("tchatRoom[room]?.messages", tchatRoom[room].messages)
+    io.to(room).emit("chatMessage", { messages : tchatRoom[room].messages});
   });
 
   // Ecoute quand un utilisateur se déconnecte
