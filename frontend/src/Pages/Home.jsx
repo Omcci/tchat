@@ -122,7 +122,7 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
       <p>{owner ? "Chef" : "Non chef"}</p>
       <div className="home">
         <div className="home-tchat">
-          <ListMessages messages={messages} />
+          <ListMessages socket={socket} messages={messages} />
         </div>
         <div className="home-listplayer">
           <ListUsers users={users} />

@@ -76,6 +76,7 @@ button:focus-visible {
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   height: 60vh;
+  overflow: auto; 
 }
   
 .home-tchat { 
