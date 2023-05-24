@@ -131,11 +131,6 @@ io.on("connection", (socket) => {
   socket.on("updateListMessage", ({ room }) => {
     console.log("updateListMessage --->", room);
     console.log("tchatRoom[room]?.messages", tchatRoom[room].messages)
-    if (tchatRoom[room].messages) {
-      tchatRoom[room].messages = tchatRoom[room].messages.map((user) =>
-      (user.userid === socket.id) ? { ...user, username } : user
-      );
-    }
     io.to(room).emit("chatMessage", { messages : tchatRoom[room].messages});
   });
 
