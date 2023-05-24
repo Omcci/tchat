@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-const ListMessages = ({ socket, messages }) => {
+const ListMessages = ({ socket, messages, username }) => {
   console.log("messages", messages);
   const listRef = useRef(null);
 

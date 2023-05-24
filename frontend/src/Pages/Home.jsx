@@ -10,7 +10,7 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   const [message, setMessage] = useState("");
   const [listMessages, setListMessages] = useState([]);
   const [typingMessage, setTypingMessage] = useState(""); // State for storing the typing message
-
+  const [newUsername, setNewUsername] = useState("");
   // Function Changer Pseudo
   const handleClickNewPseudo = (callback) => {
     socket.emit("newUsername", { username, room });
@@ -144,7 +144,11 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
           <p>List room</p>
         </div>
         <div className="home-tchat">
-          <ListMessages socket={socket} messages={listMessages} />
+          <ListMessages
+            socket={socket}
+            messages={listMessages}
+            username={username}
+          />
         </div>
         <div className="home-listplayer">
           <ListUsers users={users} />
