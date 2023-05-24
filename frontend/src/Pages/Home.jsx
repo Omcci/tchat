@@ -74,6 +74,7 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
       // Ajouter le nouveau message à la liste des messages existants
       console.log("chatMessage - message", messages);
       setMessages(messages);
+      setMessage("");
     });
 
     setTimeout(() => {
@@ -121,6 +122,11 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
       <p>Connected to tchat : {room}</p>
       <p>{owner ? "Chef" : "Non chef"}</p>
       <div className="home">
+        <div className="home-room">
+          {/* <ListMessages socket={socket} messages={messages} />
+           */}
+          <p>List room</p>
+        </div>
         <div className="home-tchat">
           <ListMessages socket={socket} messages={messages} />
         </div>
@@ -129,6 +135,9 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
         </div>
       </div>
       <div className="footer">
+        <div className="footer-home">
+          <p>sss</p>
+        </div>
         <div className="footer-message">
           <input
             type="text"

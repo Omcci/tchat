@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 const ListMessages = ({ socket, messages }) => {
   console.log("messages", messages);
-  // console.log("socket", socket.id);
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    // Faire défiler la liste vers le bas lors du chargement de la page
+    if (listRef.current && listRef.current.lastElementChild) {
+      listRef.current.lastElementChild.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   return (
-    <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
+    <ul ref={listRef} style={{ listStyleType: "none", padding: 0, margin: 0 }}>
       {/* {console.log("messages", messages)} */}
       {messages.map((message) => (
         <li key={message.id}>
@@ -17,7 +25,7 @@ const ListMessages = ({ socket, messages }) => {
               padding: "10px",
               borderRadius: "8px",
               marginBottom: "10px",
-              maxWidth: "30%",
+              maxWidth: "40%",
               wordWrap: "break-word",
             }}
           >
