@@ -9,8 +9,15 @@ var io = require('socket.io')(http, {
     methods: ["GET", "POST"],
 }});
 
+http.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
+
 const tchatRoom = {};
+const mpRoom = {};
+
 console.log("tchatRoom", tchatRoom)
+console.log("mpRoom", mpRoom);
 
 io.on("connection", (socket) => {
   // L'événement "join" qui est émis lorsque qu'un utilisateur rejoint une room.
@@ -144,8 +151,4 @@ io.on("connection", (socket) => {
       io.to(room).emit("usersInRoom", tchatRoom[room]?.users);
     });
   });
-});
-
-http.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
 });

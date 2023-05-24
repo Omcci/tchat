@@ -1,5 +1,5 @@
 const config = {
-    "ip" : "192.168.1.17",
+    "ip" : "192.168.1.31",
     "portFront" : 5173,
     "portBackend" : 3000
 }
