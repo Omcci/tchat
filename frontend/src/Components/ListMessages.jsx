@@ -6,7 +6,7 @@ const ListMessages = ({ socket, messages }) => {
 
   useEffect(() => {
     // Faire défiler la liste vers le bas lors du chargement de la page
-    if (listRef.current && listRef.current.lastElementChild) {
+    if (listRef.current.lastElementChild) {
       listRef.current.lastElementChild.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);

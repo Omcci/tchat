@@ -8,7 +8,8 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   const [isAlert, setIsAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [listMessages, setListMessages] = useState([]);
+  const [typingMessage, setTypingMessage] = useState(""); // State for storing the typing message
 
   // Function Changer Pseudo
   const handleClickNewPseudo = (callback) => {
@@ -45,6 +46,12 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   };
 
   useEffect(() => {
+    // Load the typing message from localStorage on component mount
+    const typingMessageFromStorage = localStorage.getItem("typingMessage");
+    if (typingMessageFromStorage) {
+      setTypingMessage(typingMessageFromStorage);
+    }
+
     socket.on("usersInRoom", (users) => {
       console.log("users", users);
       const checkOwner = users.filter((user) => user.owner);
@@ -73,7 +80,7 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
     socket.on("chatMessage", ({ messages }) => {
       // Ajouter le nouveau message à la liste des messages existants
       console.log("chatMessage - message", messages);
-      setMessages(messages);
+      setListMessages(messages);
       setMessage("");
     });
 
@@ -93,19 +100,28 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
       }
     };
 
-    // Vérification si l'tuilisateur force une déconnexion en ferment son navigator
+    // Save the typing message to localStorage when it changes
+    localStorage.setItem("typingMessage", typingMessage);
+
+    // Vérification si l'tuilisateur force une déconnexion en fermant son navigateur
     window.addEventListener("beforeunload", handleUnload);
 
-    // Vérification si l'tuilisateur force une déconnexion en ferment son navigator
+    // Vérification si l'utilisateur force une déconnexion en fermant son navigateur
     return () => {
       window.removeEventListener("beforeunload", handleUnload);
     };
-  }, [socket, username, room]);
+  }, [socket, username, room, typingMessage]);
+
+  const handleInputChange = (e) => {
+    setMessage(e.target.value);
+    setTypingMessage(e.target.value); // Update the typing message state
+  };
 
   const handleClickNewMessage = () => {
     console.log("message", message);
     // Envoyer le message au serveur via l'événement "chatMessage"
     socket.emit("chatMessage", { username, room, message });
+    setTypingMessage(""); // Clear the typing message state after sending the message
   };
 
   // Function Déconnexion Button
@@ -128,7 +144,7 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
           <p>List room</p>
         </div>
         <div className="home-tchat">
-          <ListMessages socket={socket} messages={messages} />
+          <ListMessages socket={socket} messages={listMessages} />
         </div>
         <div className="home-listplayer">
           <ListUsers users={users} />
@@ -142,8 +158,8 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
           <input
             type="text"
             placeholder="Message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            value={typingMessage}
+            onChange={(e) => handleInputChange(e)}
           />
           <button onClick={handleClickNewMessage}>Envoyer</button>
         </div>
