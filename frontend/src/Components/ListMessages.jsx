@@ -17,17 +17,9 @@ const ListMessages = ({ socket, messages, username }) => {
       {messages.map((message) => (
         <li key={message.id}>
           <p
-            style={{
-              color: message.userid === socket.id ? "blanc" : "blanc",
-              fontWeight: message.userid === socket.id ? "bold" : "normal",
-              marginLeft: message.userid === socket.id ? "85vh" : "3vh",
-              backgroundColor: message.userid === socket.id ? "blue" : "gray",
-              padding: "10px",
-              borderRadius: "8px",
-              marginBottom: "10px",
-              maxWidth: "40%",
-              wordWrap: "break-word",
-            }}
+            className={
+              message.userid === socket.id ? "message_send" : "message_received"
+            }
           >
             {message.username} - {message.message} - {message.time}
           </p>

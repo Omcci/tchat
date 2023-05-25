@@ -38,7 +38,6 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
         setAlertMessage("");
         setIsAlert(false);
         socket.emit("updateListMessage", { room });
-        // Mettez à jour votre logique ici en cas de réussite de la mise à jour de l'username
       } else {
         console.log("Le pseudo existe déjà dans la room");
         // Traitez l'échec de la mise à jour de l'username
