@@ -1,16 +1,19 @@
-require('dotenv').config()
+require("dotenv").config();
+
 const app = require('express')();
 const http = require('http').createServer(app);
-const PORT = process.env.portBackend;
+const { SERVER_PORT, IP, PORT_FRONT} = process.env;
+
+console.log("PORT", SERVER_PORT)
 
 var io = require('socket.io')(http, {
   cors: {
-    origin: `http://${process.env.ip}:${process.env.portFront}`,
+    origin: `http://${IP}:${PORT_FRONT}`,
     methods: ["GET", "POST"],
 }});
 
-http.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+http.listen(SERVER_PORT, () => {
+  console.log(`Server listening on port ${SERVER_PORT}`);
 });
 
 const tchatRoom = {};
