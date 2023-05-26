@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
-import env from "./env.js";
 import Home from "./Pages/Home.jsx";
 
-const ENDPOINT = `http://${env.ip}:${env.portBackend}/`;
+const ENDPOINT = `http://${import.meta.env.VITE_IP_BACKEND}:${
+  import.meta.env.VITE_PORT_BACKEND
+}/`;
 
 const App = () => {
   const [socket, setSocket] = useState(null);
