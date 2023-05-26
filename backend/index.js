@@ -76,10 +76,13 @@ io.on("connection", (socket) => {
       tchatRoom[room].messages = [];
     }
 
+    const searchUsername = tchatRoom[room].users.filter((user) => user.id === socket.id);
+    // console.log("searchUsername", searchUsername[0].username);
+
     tchatRoom[room].messages.push({
       id: tchatRoom[room].messages.length+1,
-      userid: socket.id, 
-      username : username,
+      userid: socket.id,
+      username : searchUsername[0].username,
       message: message,
       time: new Date().toLocaleTimeString() // Ajoutez l'heure actuelle au message
     });
@@ -91,6 +94,7 @@ io.on("connection", (socket) => {
 
   socket.on("newUsername", ({ username, room }) => {
     console.log("newUsername")
+    console.log("username --->", username);
     const checkUsernameExiste = tchatRoom[room]?.users?.filter(
        (user) => user.username === username
     );
@@ -101,8 +105,15 @@ io.on("connection", (socket) => {
           tchatRoom[room].users = tchatRoom[room].users.map((user) =>
             user.id === socket.id ? { ...user, username } : user
           );
-      
+          
+          if (tchatRoom[room].messages) {
+            tchatRoom[room].messages = tchatRoom[room].messages.map((user) =>
+            (user.userid === socket.id) ? { ...user, username } : user
+            );
+          }
+
           socket.emit("newUserExists", { success: true }); // Envoyer la confirmation de succès
+          console.log("tchatRoom[room].users", tchatRoom[room].users)
           io.to(room).emit("usersInRoom", tchatRoom[room].users);
         }
       } else {
