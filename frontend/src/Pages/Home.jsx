@@ -3,6 +3,7 @@ import ListUsers from "../Components/ListUsers";
 import ListMessages from "../Components/ListMessages";
 
 const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
+  console.log("socket", socket);
   const [users, setUsers] = useState([]);
   const [owner, setOwner] = useState(false);
   const [isAlert, setIsAlert] = useState(false);
@@ -130,6 +131,10 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
     socket.disconnect();
     setSocket(null);
   };
+
+  useEffect(() => {
+    localStorage.setItem("dataSocket", socket.id);
+  }, []);
 
   return (
     <div>
