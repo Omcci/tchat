@@ -14,7 +14,11 @@ const App = () => {
   const [alertMessage, setAlertMessage] = useState("");
 
   const handleConnect = async () => {
-    const newSocket = io(ENDPOINT);
+    const newSocket = io(ENDPOINT, {
+      query: {
+        token: "", // incluez le JWT dans les paramètres de connexion
+      },
+    });
     const newSocketRef = { current: newSocket }; // Variable de référence pour conserver la référence au socket
 
     newSocket.emit("join", { username, room });
@@ -23,6 +27,7 @@ const App = () => {
       await new Promise((resolve, reject) => {
         console.log("try");
         console.log("newSocketRef", newSocketRef);
+        console.log("resolve", resolve);
         newSocketRef.current.on("userExists", (message) => {
           console.log("message", message);
           if (message === "errorPseudoDoublon") {
