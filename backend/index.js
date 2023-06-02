@@ -2,11 +2,16 @@ require("dotenv").config();
 
 const app = require('express')();
 const http = require('http').createServer(app);
-const { SERVER_PORT, IP, PORT_FRONT} = process.env;
+// const jwt = require('jsonwebtoken');
+var jwtAuth = require('socketio-jwt-auth');
+const { SERVER_PORT, IP, PORT_FRONT, KEY_JWT } = process.env;
 
 console.log("PORT", SERVER_PORT)
 
 var io = require('socket.io')(http, {
+  query: {
+    token: KEY_JWT
+  },
   cors: {
     origin: `http://${IP}:${PORT_FRONT}`,
     methods: ["GET", "POST"],
@@ -22,9 +27,98 @@ const mpRoom = {};
 console.log("tchatRoom", tchatRoom)
 console.log("mpRoom", mpRoom);
 
+// using middleware
+// io.use(jwtAuth.authenticate({
+//   secret: KEY_JWT,    // required, used to verify the token's signature
+//   algorithm: 'HS256',        // optional, default to be HS256
+//   succeedWithoutToken: true
+// }, function(payload, done) {
+//   // you done callback will not include any payload data now
+//   console.log("playload", payload)
+//   // if no token was supplied
+//   if (payload && payload.sub) {
+//     User.findOne({id: payload.sub}, function(err, user) {
+//       if (err) {
+//         // return error
+//         return done(err);
+//       }
+//       if (!user) {
+//         // return fail with an error message
+//         return done(null, false, 'user does not exist');
+//       }
+//       // return success with a user info
+//       return done(null, user);
+//     });
+//   } else {
+//     return done() // in your connection handler user.logged_in will be false
+//   }
+// }));
+
+// io.use((socket, next) => {
+//   // console.log("socket --->", socket)
+//   console.log("socket.handshake", socket.handshake.query)
+//   const token = socket.handshake.query.t; // Récupérer le jeton JWT du client
+
+//   console.log("token", token)
+//   if (token) {
+//     jwt.verify(token, KEY_JWT, (err, decoded) => {
+//       if (err) {
+//         return next(new Error('Authentication error'));
+//       }
+
+//       // Ajouter les informations d'authentification à l'objet socket pour une utilisation ultérieure
+//       socket.auth = {
+//         userId: decoded.userId,
+//         username: decoded.username
+//       };
+
+//       next();
+//     });
+//   } else {
+//     console.log("error token")
+//     next(new Error('Authentication error'));
+//   }
+// });
+
+// Server side
+io.use((socket, next) => {
+  const token = socket.handshake.query.token; // Récupérer le jeton JWT du client lors de la connexion
+
+  console.log("token --->", token)
+  if (token) {
+    // Faites quelque chose avec le jeton JWT, par exemple, vérifiez sa validité ou extrayez des informations
+    // Vous pouvez utiliser une bibliothèque JWT pour cela, comme `jsonwebtoken`
+
+    // Exemple avec `jsonwebtoken`
+    const jwt = require("jsonwebtoken");
+
+    try {
+      const decoded = jwt.verify(token, KEY_JWT); // Vérifier et décoder le jeton JWT
+      console.log(decoded); // Afficher les informations extraites du jeton, par exemple, l'ID de l'utilisateur
+
+      // Vous pouvez maintenant utiliser les informations du jeton comme vous le souhaitez
+      // Par exemple, vous pouvez associer l'utilisateur au socket ou effectuer d'autres opérations d'authentification
+    } catch (error) {
+      console.log("Invalid token:", error);
+      // Traitez l'erreur si le jeton n'est pas valide
+    }
+  } else {
+    console.log("No token provided");
+    // Traitez le cas où aucun jeton n'est fourni
+  }
+
+  next();
+});
+
+
 io.on("connection", (socket) => {
+
+  console.log("socket.handshake.query", socket.handshake.query)
+  // const token = socket.request.user.token; // Récupérer le jeton JWT du client connecté
+  // console.log("'token :", token)
   // L'événement "join" qui est émis lorsque qu'un utilisateur rejoint une room.
   socket.on("join", ({ username, room }) => {
+    // console.log("Votre Token de connexion :", (socket.request.user.token))
     socket.join(room);
 
     console.log("Debut join : tchatRoom[room]", tchatRoom[room]);
@@ -48,9 +142,9 @@ io.on("connection", (socket) => {
 
     // Ajout de owner quand il crée la room
     if (!tchatRoom[room].users || tchatRoom[room].users.length === 0) {
-      tchatRoom[room].users = [{ id: socket.id, username, owner: true }];
+      tchatRoom[room].users = [{ id: socket.id, username, owner: true, token: socket.handshake.query.t }];
     } else {
-      tchatRoom[room].users.push({ id: socket.id, username, owner: false });
+      tchatRoom[room].users.push({ id: socket.id, username, owner: false, token: socket.handshake.query.t });
     }
 
     const owner = tchatRoom[room].users.filter((user) => user.owner);
