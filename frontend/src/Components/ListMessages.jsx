@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
-const ListMessages = ({ socket, messages }) => {
+const ListMessages = ({ socket, messages, username }) => {
   console.log("messages", messages);
-  // console.log("socket", socket.id);
+  const listRef = useRef(null);
+
+  useEffect(() => {
+    // Faire défiler la liste vers le bas lors du chargement de la page
+    if (listRef.current.lastElementChild) {
+      listRef.current.lastElementChild.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
   return (
-    <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
+    <ul ref={listRef} style={{ listStyleType: "none", padding: 0, margin: 0 }}>
       {/* {console.log("messages", messages)} */}
       {messages.map((message) => (
         <li key={message.id}>
           <p
-            style={{
-              color: message.userid === socket.id ? "blanc" : "blanc",
-              fontWeight: message.userid === socket.id ? "bold" : "normal",
-              marginLeft: message.userid === socket.id ? "85vh" : "3vh",
-              backgroundColor: message.userid === socket.id ? "blue" : "gray",
-              padding: "10px",
-              borderRadius: "8px",
-              marginBottom: "10px",
-              maxWidth: "30%",
-              wordWrap: "break-word",
-            }}
+            className={
+              message.userid === socket.id ? "message_send" : "message_received"
+            }
           >
             {message.username} - {message.message} - {message.time}
           </p>

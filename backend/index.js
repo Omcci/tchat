@@ -1,16 +1,26 @@
+require("dotenv").config();
+
 const app = require('express')();
 const http = require('http').createServer(app);
-const env = require('../env.js');
-const PORT = env.portBackend;
+const { SERVER_PORT, IP, PORT_FRONT} = process.env;
+
+console.log("PORT", SERVER_PORT)
 
 var io = require('socket.io')(http, {
   cors: {
-    origin: `http://${env.ip}:${env.portFront}`,
+    origin: `http://${IP}:${PORT_FRONT}`,
     methods: ["GET", "POST"],
 }});
 
+http.listen(SERVER_PORT, () => {
+  console.log(`Server listening on port ${SERVER_PORT}`);
+});
+
 const tchatRoom = {};
+const mpRoom = {};
+
 console.log("tchatRoom", tchatRoom)
+console.log("mpRoom", mpRoom);
 
 io.on("connection", (socket) => {
   // L'événement "join" qui est émis lorsque qu'un utilisateur rejoint une room.
@@ -69,10 +79,13 @@ io.on("connection", (socket) => {
       tchatRoom[room].messages = [];
     }
 
+    const searchUsername = tchatRoom[room].users.filter((user) => user.id === socket.id);
+    // console.log("searchUsername", searchUsername[0].username);
+
     tchatRoom[room].messages.push({
       id: tchatRoom[room].messages.length+1,
-      userid: socket.id, 
-      username : username,
+      userid: socket.id,
+      username : searchUsername[0].username,
       message: message,
       time: new Date().toLocaleTimeString() // Ajoutez l'heure actuelle au message
     });
@@ -84,6 +97,7 @@ io.on("connection", (socket) => {
 
   socket.on("newUsername", ({ username, room }) => {
     console.log("newUsername")
+    console.log("username --->", username);
     const checkUsernameExiste = tchatRoom[room]?.users?.filter(
        (user) => user.username === username
     );
@@ -94,8 +108,15 @@ io.on("connection", (socket) => {
           tchatRoom[room].users = tchatRoom[room].users.map((user) =>
             user.id === socket.id ? { ...user, username } : user
           );
-      
+          
+          if (tchatRoom[room].messages) {
+            tchatRoom[room].messages = tchatRoom[room].messages.map((user) =>
+            (user.userid === socket.id) ? { ...user, username } : user
+            );
+          }
+
           socket.emit("newUserExists", { success: true }); // Envoyer la confirmation de succès
+          console.log("tchatRoom[room].users", tchatRoom[room].users)
           io.to(room).emit("usersInRoom", tchatRoom[room].users);
         }
       } else {
@@ -144,8 +165,4 @@ io.on("connection", (socket) => {
       io.to(room).emit("usersInRoom", tchatRoom[room]?.users);
     });
   });
-});
-
-http.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
 });
