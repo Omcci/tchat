@@ -70,27 +70,6 @@ button:focus-visible {
 
 
 
-.footer {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-  height: 10vh;
-}
-
-.footer-home {
-  grid-area: 1 / 1 / 2 / 2;
-}
-
-.footer-message { 
-  grid-area: 1 / 2 / 2 / 3;
-  /* border: red 10px solid; */
-}
-.footer-param { 
-  grid-area: 1 / 3 / 2 / 4;
-}
-
 ::-webkit-scrollbar {
   width: 5px;
 }
