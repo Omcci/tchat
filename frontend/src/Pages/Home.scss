@@ -5,24 +5,48 @@
     grid-template-rows: 1fr;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
-    height: 60vh;
+    height: 70vh;
     /* background-color: #eca9a0; */
     border-radius: 10px;
+    margin: 0;
+    padding: 0;
   }
   
   .home-room {
     grid-area: 1 / 1 / 2 / 2;
     /* background-color: blue; */
+    background-color: rgb(0, 0, 0);
+    overflow: auto; 
+    p {
+      margin: 20px 10px;
+    }
   }
     
   .home-tchat { 
     grid-area: 1 / 2 / 2 / 3;
-    /* background-color: white; */
+    background: linear-gradient(0deg, #2b6b4e 27%, #9bfac7 100%);
     /* border: red 10px solid; */
     overflow: auto; 
+    padding: 0;
+    margin: 0;
   }
   .home-listplayer { 
     grid-area: 1 / 3 / 2 / 4;
-    /* background-color: red; */
+ background-color: rgb(0, 0, 0);
     overflow: auto; 
+    p {
+      margin: 20px 10px;
+    }
+  }
+
+  .home-header{
+    display: flex;
+    align-items: center;
+    background: linear-gradient(0deg, #5c554c 28%, #f5f5f5 100%);
+    margin-top: 10px;
+    border-radius: 8px;
+    height: 60px;
+    p{
+      margin: 8px 20px;
+    }
   }
