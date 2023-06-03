@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ListUsers from "../Components/ListUsers";
 import ListMessages from "../Components/ListMessages";
+import Footer from "../Components/Footer";
 
 const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   console.log("socket", socket);
@@ -11,7 +12,7 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   const [message, setMessage] = useState("");
   const [listMessages, setListMessages] = useState([]);
   const [typingMessage, setTypingMessage] = useState(""); // State for storing the typing message
-  const [newUsername, setNewUsername] = useState("");
+ 
   // Function Changer Pseudo
   const handleClickNewPseudo = (callback) => {
     socket.emit("newUsername", { username, room });
@@ -22,7 +23,11 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
       if (message.message === "errorPseudoDoublon") {
         setAlertMessage("Ce pseudo est déjà utilisé dans la room !");
         setIsAlert(true);
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 5000);
         callback(false); // Appel du callback avec false pour indiquer l'échec
+
       } else {
         setAlertMessage("");
         setIsAlert(false);
@@ -36,9 +41,12 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
     handleClickNewPseudo((success) => {
       console.log("success", success);
       if (success) {
-        setAlertMessage("");
-        setIsAlert(false);
+        setAlertMessage("Pseudo modifié");
+        setIsAlert(true);
         socket.emit("updateListMessage", { room });
+        setTimeout(() => {
+          setIsAlert(false);
+        }, 5000);
       } else {
         console.log("Le pseudo existe déjà dans la room");
         // Traitez l'échec de la mise à jour de l'username
@@ -113,25 +121,6 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
     };
   }, [socket, username, room, typingMessage]);
 
-  const handleInputChange = (e) => {
-    setMessage(e.target.value);
-    setTypingMessage(e.target.value); // Update the typing message state
-  };
-
-  const handleClickNewMessage = () => {
-    console.log("message", message);
-    // Envoyer le message au serveur via l'événement "chatMessage"
-    socket.emit("chatMessage", { username, room, message });
-    setTypingMessage(""); // Clear the typing message state after sending the message
-  };
-
-  // Function Déconnexion Button
-  const handleClickDisconnect = () => {
-    // button déconnexion
-    socket.disconnect();
-    setSocket(null);
-  };
-
   useEffect(() => {
     localStorage.setItem("dataSocket", socket.id);
   }, []);
@@ -139,9 +128,9 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   return (
     <div>
       {console.log("sokcet --->", socket)}
-      <p>Votre ID : {socket.id}</p>
+      {/* <p>Votre ID : {socket.id}</p> */}
       <p>Connected to tchat : {room}</p>
-      <p>{owner ? "Chef" : "Non chef"}</p>
+      <p>{owner ? "Roi du tchat" : "Invité du tchat"}</p>
       <div className="home">
         <div className="home-room">
           {/* <ListMessages socket={socket} messages={messages} />
@@ -159,32 +148,21 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
           <ListUsers users={users} />
         </div>
       </div>
-      <div className="footer">
-        <div className="footer-home">
-          <p>sss</p>
-        </div>
-        <div className="footer-message">
-          <input
-            type="text"
-            placeholder="Message"
-            value={typingMessage}
-            onChange={(e) => handleInputChange(e)}
-          />
-          <button onClick={handleClickNewMessage}>Envoyer</button>
-        </div>
-        <div className="footer-param">
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <button onClick={handleUpdateUsername}>Changer de Pseudo</button>
-          {/* {isAlert ? <p style={{ color: "red" }}>{alertMessage}</p> : ""} */}
-          {isAlert && <p style={{ color: "red" }}>{alertMessage}</p>}
-          <button onClick={handleClickDisconnect}>Déconnexion</button>
-        </div>
-      </div>
+     <Footer 
+      typingMessage={typingMessage} 
+      setTypingMessage={setTypingMessage} 
+      username={username} 
+      setUsername={setUsername} 
+      message={message}
+      setMessage={setMessage}
+      handleUpdateUsername={handleUpdateUsername} 
+      isAlert={isAlert}
+      alertMessage={alertMessage}
+      socket={socket} 
+      setSocket={setSocket}
+      room={room}
+      />
+      
     </div>
   );
 };

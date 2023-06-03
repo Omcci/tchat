@@ -1,0 +1,56 @@
+
+
+// .message_received {
+//     color : white;
+//     font-weight: normal;
+//     margin-left: 3vh;
+//     background-color: gray;
+//     padding: 10px;
+//     border-radius: 8px;
+//     margin-bottom: 10px;
+//     max-width: 40%;
+//     word-wrap: break-word;
+//   }
+
+  .message_received {
+    color : white;
+    background: linear-gradient(0deg, #c7c3bf 5%, #696969 100%);
+    font-weight: normal;
+    font-family: Comic Sans MS;
+    margin-left: 3vh;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    max-width: 40%;
+    box-shadow: 5px 5px 2px 0px #000000;
+    word-wrap: break-word;
+  }
+
+
+  
+  // .message_send {
+  //   color : white;
+  //   font-weight: bold;
+  //   margin-left: 53%;
+  //   background-color: blue;
+  //   padding: 10px;
+  //   border-radius: 8px;
+  //   margin-bottom: 10px;
+  //   max-width: 40%;
+  //   word-wrap: break-word;
+  // }
+
+  .message_send {
+   
+    margin-left: 53%;
+    background: linear-gradient(0deg, #70b5e0 10%, #392bff 100%);
+    color: #ffffff;
+    font-family: Comic Sans MS;
+    font-size: 20px;
+    box-shadow: 5px 5px 2px 0px #000000;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    max-width: 40%;
+    word-wrap: break-word;
+  }
