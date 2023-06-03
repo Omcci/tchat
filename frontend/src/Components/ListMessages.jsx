@@ -16,13 +16,16 @@ const ListMessages = ({ socket, messages, username }) => {
       {/* {console.log("messages", messages)} */}
       {messages.map((message) => (
         <li key={message.id}>
-          <p
+          <div
             className={
               message.userid === socket.id ? "message_send" : "message_received"
             }
           >
-            {message.username} - {message.message} - {message.time}
-          </p>
+            <p className="pusername">{message.username}</p>
+            <p className="pmessage">{message.message}</p>
+            <p className="ptime">{message.time}</p>
+            
+          </div>
         </li>
       ))}
     </ul>
