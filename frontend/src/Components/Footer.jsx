@@ -12,7 +12,7 @@ function Footer({
   setMessage,
   socket,
   setSocket,
-  room
+  room,
 }) {
   const handleInputChange = (e) => {
     setMessage(e.target.value);
@@ -48,12 +48,15 @@ function Footer({
         <button onClick={handleClickNewMessage}>Envoyer</button>
       </div>
       <div className="footer-param">
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        <div className="footer-input">
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+
         <button onClick={handleUpdateUsername}>Changer de Pseudo</button>
         {/* {isAlert ? <p style={{ color: "red" }}>{alertMessage}</p> : ""} */}
         {isAlert && <p style={{ color: "red" }}>{alertMessage}</p>}
