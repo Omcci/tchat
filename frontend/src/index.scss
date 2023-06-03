@@ -69,33 +69,6 @@ button:focus-visible {
 }
 
 
-.home {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
-  height: 60vh;
-  /* background-color: #eca9a0; */
-  border-radius: 10px;
-}
-
-.home-room {
-  grid-area: 1 / 1 / 2 / 2;
-  /* background-color: blue; */
-}
-  
-.home-tchat { 
-  grid-area: 1 / 2 / 2 / 3;
-  /* background-color: white; */
-  /* border: red 10px solid; */
-  overflow: auto; 
-}
-.home-listplayer { 
-  grid-area: 1 / 3 / 2 / 4;
-  /* background-color: red; */
-  overflow: auto; 
-}
 
 .footer {
   display: grid;
@@ -133,26 +106,3 @@ button:focus-visible {
   background-color: #1a1a1a;
 }
 
-.message_received {
-  color : white;
-  font-weight: normal;
-  margin-left: 3vh;
-  background-color: gray;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  max-width: 40%;
-  word-wrap: break-word;
-}
-
-.message_send {
-  color : white;
-  font-weight: bold;
-  margin-left: 53%;
-  background-color: blue;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  max-width: 40%;
-  word-wrap: break-word;
-}

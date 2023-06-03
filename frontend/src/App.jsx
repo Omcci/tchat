@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import Home from "./Pages/Home.jsx";
+import './index.scss'
+import './App.scss'
+import './Components/ListMessages.scss'
+import './Pages/Home.scss'
+
 
 const ENDPOINT = `http://${import.meta.env.VITE_IP_BACKEND}:${
   import.meta.env.VITE_PORT_BACKEND
