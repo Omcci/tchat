@@ -6,6 +6,7 @@ import './App.scss'
 import './Components/ListMessages.scss'
 import './Pages/Home.scss'
 import './Components/Footer.scss'
+import './Components/Header.scss'
 
 
 const ENDPOINT = `http://${import.meta.env.VITE_IP_BACKEND}:${

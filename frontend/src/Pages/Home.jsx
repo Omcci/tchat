@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ListUsers from "../Components/ListUsers";
 import ListMessages from "../Components/ListMessages";
 import Footer from "../Components/Footer";
+import Header from "../Components/Header";
 
 const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   console.log("socket", socket);
@@ -129,10 +130,7 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
     <div>
       {console.log("sokcet --->", socket)}
       {/* <p>Votre ID : {socket.id}</p> */}
-      <div className="home-header">
-      <p>Connected to tchat : {room}</p>
-      <p>{owner ? "Roi du tchat" : "Invité du tchat"}</p>
-      </div>
+      <Header room={room} owner={owner} />
       
       <div className="home">
         <div className="home-room">
