@@ -41,16 +41,35 @@
   // }
 
   .message_send {
-   
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    align-items: flex-end;
     margin-left: 53%;
     background: linear-gradient(0deg, #70b5e0 10%, #392bff 100%);
     color: #ffffff;
     font-family: Comic Sans MS;
-    font-size: 20px;
     box-shadow: 5px 5px 2px 0px #000000;
     padding: 10px;
     border-radius: 8px;
     margin-bottom: 10px;
     max-width: 40%;
+  }
+
+  .pusername {
+    font-size: 20px;
+    width: 100%;
+    margin: 0;
+    font-weight: bold;
+
+  }
+  .ptime{
+    font-size: 8px;
+    width: 100%;
+    margin: 0 85%;
+  }
+  .pmesssage{
+    font-size: 12px;
     word-wrap: break-word;
   }
