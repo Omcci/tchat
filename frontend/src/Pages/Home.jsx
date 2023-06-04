@@ -129,8 +129,11 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
     <div>
       {console.log("sokcet --->", socket)}
       {/* <p>Votre ID : {socket.id}</p> */}
+      <div className="home-header">
       <p>Connected to tchat : {room}</p>
       <p>{owner ? "Roi du tchat" : "Invité du tchat"}</p>
+      </div>
+      
       <div className="home">
         <div className="home-room">
           {/* <ListMessages socket={socket} messages={messages} />
