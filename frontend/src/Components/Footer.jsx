@@ -41,11 +41,11 @@ function Footer({
       <div className="footer-message">
         <input
           type="text"
-          placeholder="Message"
+          placeholder="Type your message ..."
           value={typingMessage}
           onChange={(e) => handleInputChange(e)}
         />
-        <button onClick={handleClickNewMessage}>Envoyer</button>
+        <button onClick={handleClickNewMessage}>Send</button>
       </div>
       <div className="footer-param">
         <div className="footer-input">
