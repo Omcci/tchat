@@ -81,10 +81,10 @@
   grid-area: 1 / 3 / 2 / 4;
   border-left: 2px solid darkgray;
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center;
+  justify-content: space-evenly;
+
+  
   input {
     border-radius: 15px;
     margin-right: 10px;
@@ -92,6 +92,7 @@
     background-color: white;
     color: #000000;
     outline: none;
+    border: 1px solid darkgray;
   }
   input:focus {
     outline: none;
@@ -117,6 +118,11 @@
     border: solid 1px transparent;
     cursor: pointer;
     outline: none;
+  }
+  .buttons-param{
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 

@@ -56,11 +56,12 @@ function Footer({
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
-
-        <button onClick={handleUpdateUsername}>Changer de Pseudo</button>
+        <div className="buttons-param">
+        <button onClick={handleUpdateUsername}>Change Username</button>
         {/* {isAlert ? <p style={{ color: "red" }}>{alertMessage}</p> : ""} */}
         {isAlert && <p style={{ color: "red" }}>{alertMessage}</p>}
-        <button onClick={handleClickDisconnect}>Déconnexion</button>
+        <button onClick={handleClickDisconnect}>Disconnect</button>
+        </div>
       </div>
     </div>
   );
