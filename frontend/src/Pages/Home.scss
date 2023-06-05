@@ -1,42 +1,42 @@
-
 .home {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 1fr;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    height: 70vh;
-    /* background-color: #eca9a0; */
-    border-radius: 10px;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .home-room {
-    grid-area: 1 / 1 / 2 / 2;
-    /* background-color: blue; */
-    background-color: rgb(0, 0, 0);
-    overflow: auto; 
-    p {
-      margin: 20px 10px;
-    }
-  }
-    
-  .home-tchat { 
-    grid-area: 1 / 2 / 2 / 3;
-    background: linear-gradient(0deg, #f7f7f7 27%, #e3e3e3 100%);
-    /* border: red 10px solid; */
-    overflow: auto; 
-    padding: 0;
-    margin: 0;
-  }
-  .home-listplayer { 
-    grid-area: 1 / 3 / 2 / 4;
- background-color: rgb(0, 0, 0);
-    overflow: auto; 
-    p {
-      margin: 20px 10px;
-    }
-  }
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  height: 70vh;
+  /* background-color: #eca9a0; */
+  border-radius: 10px;
+  margin: 0;
+  padding: 0;
+}
 
- 
+.home-room {
+  grid-area: 1 / 1 / 2 / 2;
+  /* background-color: blue; */
+  background-color: rgb(0, 0, 0);
+  overflow: auto;
+  p {
+    margin: 20px 10px;
+  }
+}
+
+.home-tchat {
+  grid-area: 1 / 2 / 2 / 3;
+  background: linear-gradient(0deg, #f7f7f7 27%, #e3e3e3 100%);
+  /* border: red 10px solid; */
+  overflow: auto;
+  padding: 0;
+  margin: 0;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+.home-listplayer {
+  grid-area: 1 / 3 / 2 / 4;
+  background-color: rgb(0, 0, 0);
+  overflow: auto;
+  p {
+    margin: 20px 10px;
+  }
+}
