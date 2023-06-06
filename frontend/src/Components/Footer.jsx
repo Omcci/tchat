@@ -26,6 +26,12 @@ function Footer({
     setTypingMessage(""); // Clear the typing message state after sending the message
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && message.trim() !== "") {
+      socket.emit("chatMessage", { username, room, message })
+    }
+  }
+
   // Function Déconnexion Button
   const handleClickDisconnect = () => {
     // button déconnexion
@@ -44,8 +50,9 @@ function Footer({
           placeholder="Type your message ..."
           value={typingMessage}
           onChange={(e) => handleInputChange(e)}
+          onKeyDown={handleKeyPress}
         />
-        <button onClick={handleClickNewMessage}>Send</button>
+        <button onClick={handleClickNewMessage} >Send</button>
       
       </div>
       <div className="footer-param">
