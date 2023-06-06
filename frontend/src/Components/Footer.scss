@@ -27,12 +27,17 @@
   position: relative;
 
   ::placeholder {
-    font-size: small;
+    font-size: medium;
+    position: relative;
+   
   }
 
 
   input {
     // border-radius: 15px;
+    position: relative;
+    left: 20px;
+    top: 6px;
     margin-right: 10px;
     height: 80%;
     width: 80%;
@@ -41,6 +46,8 @@
     outline: none;
     cursor: pointer;
     color: #000000;
+    font-size: medium;
+    
   }
   input:focus {
     outline: none;
@@ -151,4 +158,9 @@
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.alertmessage {
+  color: red;
+  font-size: smaller;
 }

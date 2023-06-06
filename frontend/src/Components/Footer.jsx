@@ -60,7 +60,7 @@ function Footer({
         <div className="buttons-param">
         <button onClick={handleUpdateUsername}>Change Username</button>
         {/* {isAlert ? <p style={{ color: "red" }}>{alertMessage}</p> : ""} */}
-        {isAlert && <p style={{ color: "red" }}>{alertMessage}</p>}
+        {isAlert && <p className="alertmessage">{alertMessage}</p>}
         <button onClick={handleClickDisconnect}>Disconnect</button>
         </div>
       </div>
