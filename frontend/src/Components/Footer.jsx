@@ -46,6 +46,7 @@ function Footer({
           onChange={(e) => handleInputChange(e)}
         />
         <button onClick={handleClickNewMessage}>Send</button>
+      
       </div>
       <div className="footer-param">
         <div className="footer-input">
