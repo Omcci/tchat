@@ -13,8 +13,8 @@
 //   }
 
   .message_received {
-    color : white;
-    background: linear-gradient(0deg, #c7c3bf 5%, #696969 100%);
+    color : black;
+    background-color: white;
     font-weight: normal;
     font-family: Comic Sans MS;
     margin-left: 3vh;
@@ -22,8 +22,11 @@
     border-radius: 8px;
     margin-bottom: 10px;
     max-width: 40%;
-    box-shadow: 5px 5px 2px 0px #000000;
     word-wrap: break-word;
+    box-shadow: 0px 0px 5px 2px rgba(176, 176, 176, 0.63);
+    p{
+      margin: 0;
+    }
   }
 
 
@@ -47,14 +50,17 @@
     flex-wrap: wrap;
     align-items: flex-end;
     margin-left: 53%;
-    background: linear-gradient(0deg, #70b5e0 10%, #392bff 100%);
+    background: linear-gradient(0deg, #6bb9ea 10%, #52b4d5 100%);
     color: #ffffff;
     font-family: Comic Sans MS;
-    box-shadow: 5px 5px 2px 0px #000000;
     padding: 10px;
     border-radius: 8px;
     margin-bottom: 10px;
     max-width: 40%;
+    box-shadow: 0px 0px 5px 2px rgba(176, 176, 176, 0.63);
+    p{
+      margin: 0;
+    }
   }
 
   .pusername {
@@ -67,9 +73,10 @@
   .ptime{
     font-size: 8px;
     width: 100%;
-    margin: 0 85%;
+    margin: 0 85% !important;
   }
   .pmesssage{
+    margin: 0;
     font-size: 12px;
     word-wrap: break-word;
   }

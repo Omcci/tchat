@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ListUsers from "../Components/ListUsers";
 import ListMessages from "../Components/ListMessages";
 import Footer from "../Components/Footer";
+import Header from "../Components/Header";
 
 const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   console.log("socket", socket);
@@ -12,7 +13,6 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   const [message, setMessage] = useState("");
   const [listMessages, setListMessages] = useState([]);
   const [typingMessage, setTypingMessage] = useState(""); // State for storing the typing message
- 
   // Function Changer Pseudo
   const handleClickNewPseudo = (callback) => {
     socket.emit("newUsername", { username, room });
@@ -27,7 +27,6 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
           setIsAlert(false);
         }, 5000);
         callback(false); // Appel du callback avec false pour indiquer l'échec
-
       } else {
         setAlertMessage("");
         setIsAlert(false);
@@ -129,16 +128,16 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
     <div>
       {console.log("sokcet --->", socket)}
       {/* <p>Votre ID : {socket.id}</p> */}
-      <div className="home-header">
-      <p>Connected to tchat : {room}</p>
-      <p>{owner ? "Roi du tchat" : "Invité du tchat"}</p>
-      </div>
-      
+      <Header room={room} owner={owner} />
+
       <div className="home">
         <div className="home-room">
           {/* <ListMessages socket={socket} messages={messages} />
            */}
-          <p>List room</p>
+          <div className="home-roomlist">
+            <input type="text" placeholder="Search a room" />
+            <p>List room</p>
+          </div>
         </div>
         <div className="home-tchat">
           <ListMessages
@@ -147,25 +146,27 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
             username={username}
           />
         </div>
-        <div className="home-listplayer">
-          <ListUsers users={users} />
+        <div className="home-player">
+          <div className="home-listplayer">
+            <input type="text" placeholder="Search a player" />
+            <ListUsers users={users} />
+          </div>
         </div>
       </div>
-     <Footer 
-      typingMessage={typingMessage} 
-      setTypingMessage={setTypingMessage} 
-      username={username} 
-      setUsername={setUsername} 
-      message={message}
-      setMessage={setMessage}
-      handleUpdateUsername={handleUpdateUsername} 
-      isAlert={isAlert}
-      alertMessage={alertMessage}
-      socket={socket} 
-      setSocket={setSocket}
-      room={room}
+      <Footer
+        typingMessage={typingMessage}
+        setTypingMessage={setTypingMessage}
+        username={username}
+        setUsername={setUsername}
+        message={message}
+        setMessage={setMessage}
+        handleUpdateUsername={handleUpdateUsername}
+        isAlert={isAlert}
+        alertMessage={alertMessage}
+        socket={socket}
+        setSocket={setSocket}
+        room={room}
       />
-      
     </div>
   );
 };

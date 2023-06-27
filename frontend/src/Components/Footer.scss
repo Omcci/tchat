@@ -1,66 +1,134 @@
-
 .footer {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 1fr;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
-    height: 15vh;
-    background: linear-gradient(0deg, #5c554c 15%, #e5e0ff 100%);
-    margin: 0 10px;
-    border-radius: 8px;
-    box-shadow: 5px 5px 2px 0px #000000;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  height: 7vh;
+  background-color: white;
+  box-shadow: 5px 5px 2px 0px #000000;
+  border-top: 1px solid lightgray;
+}
 
+.footer-home {
+  grid-area: 1 / 1 / 2 / 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 2px solid darkgray;
+}
+
+.footer-message {
+  // display: flex;
+  // justify-content: flex-end;
+  // align-items: center;
+  // grid-area: 1 / 2 / 2 / 3;
+  // margin : 20px;
+  position: relative;
+
+  ::placeholder {
+    font-size: small;
   }
+
+  input {
+    // border-radius: 15px;
+    margin-right: 10px;
+    height: 80%;
+    width: 80%;
+    background-color: white;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: #000000;
+  }
+  input:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 10px;
+    top: 15%;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    text-decoration: none;
+    background-color: #f7f7f7;
+    background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(#f7f7f7),
+      to(#e7e7e7)
+    );
+    background-image: -webkit-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -moz-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -ms-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -o-linear-gradient(top, #f7f7f7, #e7e7e7);
+    color: #a7a7a7;
+    box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
+    border: solid 1px transparent;
+    cursor: pointer;
+    outline: none;
+    font-size: small;
+  }
+
+  /* border: red 10px solid; */
+}
+.footer-param {
+  grid-area: 1 / 3 / 2 / 4;
+  border-left: 2px solid darkgray;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+
   
-  .footer-home {
-    grid-area: 1 / 1 / 2 / 2;
+  input {
+    border-radius: 15px;
+    margin-right: 10px;
+    height: 20px;
+    background-color: white;
+    color: #000000;
+    outline: none;
+    border: 1px solid darkgray;
+  }
+  input:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  button {
+    font-size: 10px;
+    margin: 2px;
+    background-color: #f7f7f7;
+    background-image: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(#f7f7f7),
+      to(#e7e7e7)
+    );
+    background-image: -webkit-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -moz-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -ms-linear-gradient(top, #f7f7f7, #e7e7e7);
+    background-image: -o-linear-gradient(top, #f7f7f7, #e7e7e7);
+    color: #a7a7a7;
+    box-shadow: 0px 3px 8px #aaa, inset 0px 2px 3px #fff;
+    border: solid 1px transparent;
+    cursor: pointer;
+    outline: none;
+  }
+  .buttons-param{
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  
-  .footer-message { 
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    grid-area: 1 / 2 / 2 / 3;
-    margin : 20px;
-  
-    input {
-        border-radius: 15px;
-        margin-right: 10px;
-        height: 35px;
-        width: 300px;
-       
-    }
-    button {
-        border-radius: 15px;
-    }
+}
 
-    
-    /* border: red 10px solid; */
-  }
-  .footer-param { 
-    grid-area: 1 / 3 / 2 / 4;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    align-items: center;
-    input {
-        border-radius: 15px;
-        margin-right: 10px;
-        height: 20px;
-    }
-    button {
-        font-size: 10px;
-        margin: 4px;
-    }
-  }
-  
-  .footer-input {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
+.footer-input {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

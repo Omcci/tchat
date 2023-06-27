@@ -1,0 +1,13 @@
+.home-header{
+    display: flex;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    height: 7vh;
+    border-bottom: 1px solid lightgray;
+    box-shadow: 5px 5px 2px 0px #000000;
+
+    p{
+      margin: 8px 20px;
+      color: black;
+    }
+  }
