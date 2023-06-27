@@ -13,7 +13,6 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   const [message, setMessage] = useState("");
   const [listMessages, setListMessages] = useState([]);
   const [typingMessage, setTypingMessage] = useState(""); // State for storing the typing message
-
   // Function Changer Pseudo
   const handleClickNewPseudo = (callback) => {
     socket.emit("newUsername", { username, room });

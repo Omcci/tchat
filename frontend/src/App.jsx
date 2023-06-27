@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import Home from "./Pages/Home.jsx";
-import './index.scss'
-import './App.scss'
-import './Components/ListMessages.scss'
-import './Pages/Home.scss'
-import './Components/Footer.scss'
-import './Components/Header.scss'
-
+import "./index.scss";
+import "./App.scss";
+import "./Components/ListMessages.scss";
+import "./Pages/Home.scss";
+import "./Components/Footer.scss";
+import "./Components/Header.scss";
 
 const ENDPOINT = `http://${import.meta.env.VITE_IP_BACKEND}:${
   import.meta.env.VITE_PORT_BACKEND
@@ -58,6 +57,11 @@ const App = () => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleConnect();
+    }
+  };
   useEffect(() => {
     console.log("socket", socket);
   }, [socket]);
@@ -80,6 +84,7 @@ const App = () => {
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
           {/* <input
             type="text"
