@@ -17,9 +17,9 @@ const ListMessages = ({ socket, messages, username }) => {
       {messages.map((message) => (
         <li key={message.id}>
           <div
-                className={
-                  message.userid === socket.id ? "message_send" : "message_received"
-                }
+            className={
+              message.userid === socket.id ? "message_send" : "message_received"
+            }
           >
             <p className="pusername">{message.username}</p>
             <p className="pmessage">{message.message}</p>

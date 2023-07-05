@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Timer from "./Timer.jsx";
+import EmojiPicker from "emoji-picker-react";
 function Footer({
   typingMessage,
   setTypingMessage,
@@ -13,10 +14,12 @@ function Footer({
   socket,
   setSocket,
   room,
+  setVisibleEmoji,
+  visibleEmoji,
+  setChosenEmoji,
 }) {
-  const [showMessage, setShowMessage] = useState(false);
-  const [messageDupli, setMessageDupli] = useState("");
   const [counter, setCounter] = useState(0);
+
   const handleInputChange = (e) => {
     setMessage(e.target.value);
     setTypingMessage(e.target.value); // Update the typing message state
@@ -28,15 +31,8 @@ function Footer({
       // Envoyer le message au serveur via l'événement "chatMessage"
       socket.emit("chatMessage", { username, room, message });
       setTypingMessage(""); // Clear the typing message state after sending the message
-      // setMessageDupli("");
-      // setShowMessage(true);
       setCounter(5);
     }
-
-    // setTimeout(() => {
-    //   setShowMessage(false);
-    //   setMessageDupli("");
-    // }, 3000);
   };
 
   // Function Déconnexion Button
@@ -55,12 +51,19 @@ function Footer({
     }
   };
 
+  const handleClickEmoji = () => {
+    setVisibleEmoji(!visibleEmoji);
+  };
+
   return (
     <div className="footer">
       <div className="footer-home">
         <p>Soon</p>
       </div>
       <div className="footer-message">
+        <div className="button-emoji">
+          <div className="emoji"></div>
+        </div>
         <input
           type="text"
           placeholder="Type your message ..."
@@ -69,7 +72,7 @@ function Footer({
           onKeyPress={handleKeyPress}
         />
         <button onClick={handleClickNewMessage}>Send</button>
-        {/* {showMessage && <p>{messageDupli}</p>} */}
+        <button onClick={handleClickEmoji}>Emoji</button>
         {counter != 0 ? <Timer time={counter} setCounter={setCounter} /> : ""}
       </div>
       <div className="footer-param">

@@ -3,7 +3,9 @@ import ListUsers from "../Components/ListUsers";
 import ListMessages from "../Components/ListMessages";
 import Footer from "../Components/Footer";
 import Header from "../Components/Header";
-
+// import Picker from "emoji-picker-react";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   console.log("socket", socket);
   const [users, setUsers] = useState([]);
@@ -13,6 +15,9 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
   const [message, setMessage] = useState("");
   const [listMessages, setListMessages] = useState([]);
   const [typingMessage, setTypingMessage] = useState(""); // State for storing the typing message
+  const [visibleEmoji, setVisibleEmoji] = useState(false);
+  const [chosenEmoji, setChosenEmoji] = useState(null);
+
   // Function Changer Pseudo
   const handleClickNewPseudo = (callback) => {
     socket.emit("newUsername", { username, room });
@@ -51,6 +56,14 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
         // Traitez l'échec de la mise à jour de l'username
       }
     });
+  };
+
+  const handleEmojiClick = (emoji) => {
+    // console.log("emoji", emoji.native);
+    var newMesage = `${typingMessage} ${emoji.native}`;
+    setTypingMessage(newMesage);
+    setMessage(newMesage);
+    console.log("typingMessage", typingMessage);
   };
 
   useEffect(() => {
@@ -124,6 +137,21 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
     localStorage.setItem("dataSocket", socket.id);
   }, []);
 
+  const EmojiData = ({ chosenEmoji }) => {
+    console.log(" EmojiData --> chosenEmoji", chosenEmoji);
+    console.log("EmojiData chosenEmoji.emoji", chosenEmoji?.emoji);
+    return (
+      <div>
+        <strong>Unified:</strong> {chosenEmoji?.unified}
+        <br />
+        {/* <strong>Names:</strong> {chosenEmoji?.names.join(", ")} */}
+        <br />
+        <strong>Symbol:</strong> {chosenEmoji?.target}
+        <br />
+        <strong>ActiveSkinTone:</strong> {chosenEmoji?.activeSkinTone}
+      </div>
+    );
+  };
   return (
     <div>
       {console.log("sokcet --->", socket)}
@@ -145,6 +173,26 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
             messages={listMessages}
             username={username}
           />
+          {visibleEmoji ? (
+            <div className="emoji">
+              {/* <EmojiPicker onEmojiClick={onEmojiClick} /> */}
+              {/* <Picker
+                onEmojiClick={handleEmojiClick}
+                // onEmojiClick={onEmojiClick}
+                // disableAutoFocus={true}
+                // native
+              /> */}
+              <Picker
+                data={data}
+                onEmojiSelect={(emoji) => handleEmojiClick(emoji)}
+              />
+              {/* {chosenEmoji && <EmojiData chosenEmoji={chosenEmoji} />} */}
+            </div>
+          ) : (
+            ""
+          )}
+          {/* {chosenEmoji ? chosenEmoji?.emoji : ""} */}
+          {/* <strong>Symbol:</strong> {chosenEmoji?.emoji} */}
         </div>
         <div className="home-player">
           <div className="home-listplayer">
@@ -166,6 +214,9 @@ const Home = ({ socket, setSocket, username, setUsername, room, setRoom }) => {
         socket={socket}
         setSocket={setSocket}
         room={room}
+        setVisibleEmoji={setVisibleEmoji}
+        visibleEmoji={visibleEmoji}
+        setChosenEmoji={setChosenEmoji}
       />
     </div>
   );
